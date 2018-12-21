@@ -4,7 +4,7 @@
  *
  * @author james, @date 12/16/18 7:41 PM
  */
-public class Library {
+public class InstrumentationPretty {
     public boolean someLibraryMethod() {
         return true;
     }
