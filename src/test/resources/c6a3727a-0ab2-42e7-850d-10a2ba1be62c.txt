@@ -1,0 +1,23 @@
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=
+com.amazonaws.devicefarm.android.referenceapp.Categories.AlertPageTest:
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=testAlert
+INSTRUMENTATION_STATUS: class=com.amazonaws.devicefarm.android.referenceapp.Categories.AlertPageTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS_CODE: 1
+INSTRUMENTATION_STATUS: numtests=1
+INSTRUMENTATION_STATUS: stream=.
+INSTRUMENTATION_STATUS: id=AndroidJUnitRunner
+INSTRUMENTATION_STATUS: test=testAlert
+INSTRUMENTATION_STATUS: class=com.amazonaws.devicefarm.android.referenceapp.Categories.AlertPageTest
+INSTRUMENTATION_STATUS: current=1
+INSTRUMENTATION_STATUS_CODE: 0
+INSTRUMENTATION_RESULT: stream=
+
+Time: 2.798
+
+OK (1 test)
+
+
+INSTRUMENTATION_CODE: -1

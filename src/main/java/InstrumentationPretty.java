@@ -5,7 +5,14 @@
  * @author james, @date 12/16/18 7:41 PM
  */
 public class InstrumentationPretty {
-    public boolean someLibraryMethod() {
-        return true;
+
+    private String filePath;
+
+    public InstrumentationPretty(String filePath){
+        this.filePath = filePath;
+    }
+
+    public static void main(String args[]){
+        
     }
 }
