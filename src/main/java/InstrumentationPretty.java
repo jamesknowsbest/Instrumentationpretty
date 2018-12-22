@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -35,12 +36,17 @@ public class InstrumentationPretty {
         while ((line = br.readLine()) != null){
            lines.add(line);
         } 
-        parser.processNewLines((String[])lines.toArray());
+        parser.processNewLines(lines.toArray(new String[0]));
+        File reportDir = new File(System.getProperty("user.dir") + "/reports");
+        reportDir.mkdir();
+        testListener.setReportDir(reportDir);
+        testListener.createOutputResultStream(reportDir);
     }
 
     public static void main(String args[]){
+        System.out.println(Arrays.toString(args));
         try {
-            new InstrumentationPretty(args[1]).processInsturmentationOutput();
+            new InstrumentationPretty(args[0]).processInsturmentationOutput();
         } catch (IOException e) {
             e.printStackTrace();
         }

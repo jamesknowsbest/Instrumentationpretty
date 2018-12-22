@@ -8,5 +8,12 @@
   The [android tools for gradle](https://android.googlesource.com/platform/tools/base/) has actually already implemented a parser [here](https://android.googlesource.com/platform/tools/base/+/android-5.1.1_r6/ddmlib/src/main/java/com/android/ddmlib/testrunner/InstrumentationResultParser.java). However, it's built for listening to tests and not reading a file. This code repository is a slight modification of that code base and is inteded to be used with the standard output from an instrumentation command which is written to a file.  
 
 ## example usage
- TODO
+
+### Building
+ `./gradlew clean build`
+
+### Running
+ `java -classpath ./build/libs/Instrumentationpretty.jar InstrumentationPretty src/test/resources/c6a3727a-0ab2-42e7-850d-10a2ba1be62c.txt`
+
+ 
 
