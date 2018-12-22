@@ -227,20 +227,6 @@ public class InstrumentationResultParser extends MultiLineReceiver {
     }
 
     /**
-     * Processes the instrumentation test output from shell.
-     *
-     * @see MultiLineReceiver#processNewLines
-     */
-    @Override
-    public void processNewLines(String line2) {
-        for (String line : line2) {
-            parse(line);
-            // in verbose mode, dump all adb output to log
-            Log.v(LOG_TAG, line);
-        }
-    }
-
-    /**
      * Parse an individual output line. Expects a line that is one of:
      * <ul>
      * <li>
@@ -598,6 +584,15 @@ public class InstrumentationResultParser extends MultiLineReceiver {
                 }
                 listener.testRunEnded(mTestTime, mInstrumentationResultBundle);
             }
+        }
+    }
+
+    @Override
+    public void processNewLines(String[] lines) {
+        for (String line : lines) {
+            parse(line);
+            // in verbose mode, dump all adb output to log
+            Log.v(LOG_TAG, line);
         }
     }
 }

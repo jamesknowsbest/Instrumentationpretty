@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-
-import com.android.SdkConstants;
-
 import org.kxml2.io.KXmlSerializer;
 
 import java.io.BufferedOutputStream;
@@ -141,8 +138,8 @@ public class XmlTestRunListener implements ITestRunListener {
         try {
             stream = createOutputResultStream(reportDir);
             KXmlSerializer serializer = new KXmlSerializer();
-            serializer.setOutput(stream, SdkConstants.UTF_8);
-            serializer.startDocument(SdkConstants.UTF_8, null);
+            serializer.setOutput(stream, "UTF-8");
+            serializer.startDocument("UTF-8", null);
             serializer.setFeature(
                     "http://xmlpull.org/v1/doc/features.html#indent-output", true);
             // TODO: insert build info
