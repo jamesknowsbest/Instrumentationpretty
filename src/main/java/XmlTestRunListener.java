@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package com.android.ddmlib.testrunner;
 
 import com.android.SdkConstants;
-import com.android.ddmlib.Log;
-import com.android.ddmlib.Log.LogLevel;
-import com.android.ddmlib.testrunner.TestResult.TestStatus;
 
 import org.kxml2.io.KXmlSerializer;
 
@@ -107,9 +103,9 @@ public class XmlTestRunListener implements ITestRunListener {
     @Override
     public void testFailed(TestFailure status, TestIdentifier test, String trace) {
         if (status.equals(TestFailure.ERROR)) {
-            mRunResult.reportTestFailure(test, TestStatus.ERROR, trace);
+            mRunResult.reportTestFailure(test, TestResult.TestStatus.ERROR, trace);
         } else {
-            mRunResult.reportTestFailure(test, TestStatus.FAILURE, trace);
+            mRunResult.reportTestFailure(test, TestResult.TestStatus.FAILURE, trace);
         }
         Log.d(LOG_TAG, String.format("%s %s: %s", test, status, trace));
     }
@@ -155,7 +151,7 @@ public class XmlTestRunListener implements ITestRunListener {
             String msg = String.format("XML test result file generated at %s. Total tests %d, " +
                     "Failed %d, Error %d", getAbsoluteReportPath(), mRunResult.getNumTests(),
                     mRunResult.getNumFailedTests(), mRunResult.getNumErrorTests());
-            Log.logAndDisplay(LogLevel.INFO, LOG_TAG, msg);
+            Log.logAndDisplay(Log.LogLevel.INFO, LOG_TAG, msg);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Failed to generate report data");
             // TODO: consider throwing exception
@@ -263,8 +259,8 @@ public class XmlTestRunListener implements ITestRunListener {
         long elapsedTimeMs = testResult.getEndTime() - testResult.getStartTime();
         serializer.attribute(ns, ATTR_TIME, Double.toString((double) elapsedTimeMs / 1000.f));
 
-        if (!TestStatus.PASSED.equals(testResult.getStatus())) {
-            String result = testResult.getStatus().equals(TestStatus.FAILURE) ? FAILURE : ERROR;
+        if (!TestResult.TestStatus.PASSED.equals(testResult.getStatus())) {
+            String result = testResult.getStatus().equals(TestResult.TestStatus.FAILURE) ? FAILURE : ERROR;
             serializer.startTag(ns, result);
             // TODO: get message of stack trace ?
 //            String msg = testResult.getStackTrace();

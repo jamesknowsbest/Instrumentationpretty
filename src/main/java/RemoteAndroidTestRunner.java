@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-package com.android.ddmlib.testrunner;
-
-import com.android.annotations.NonNull;
-import com.android.ddmlib.AdbCommandRejectedException;
-import com.android.ddmlib.IShellEnabledDevice;
-import com.android.ddmlib.Log;
-import com.android.ddmlib.ShellCommandUnresponsiveException;
-import com.android.ddmlib.TimeoutException;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,9 +27,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class RemoteAndroidTestRunner implements IRemoteAndroidTestRunner  {
 
-    private final String mPackageName;
-    private final String mRunnerName;
-    private IShellEnabledDevice mRemoteDevice;
     // default to no timeout
     private long mMaxTimeToOutputResponse = 0;
     private TimeUnit mMaxTimeUnits = TimeUnit.MILLISECONDS;
@@ -63,48 +51,6 @@ public class RemoteAndroidTestRunner implements IRemoteAndroidTestRunner  {
     private static final String PACKAGE_ARG_NAME = "package";
     private static final String SIZE_ARG_NAME = "size";
     private String mRunOptions = "";
-
-    /**
-     * Creates a remote Android test runner.
-     *
-     * @param packageName the Android application package that contains the tests to run
-     * @param runnerName the instrumentation test runner to execute. If null, will use default
-     *   runner
-     * @param remoteDevice the Android device to execute tests on
-     */
-    public RemoteAndroidTestRunner(String packageName,
-                                   String runnerName,
-                                   IShellEnabledDevice remoteDevice) {
-
-        mPackageName = packageName;
-        mRunnerName = runnerName;
-        mRemoteDevice = remoteDevice;
-        mArgMap = new Hashtable<String, String>();
-    }
-
-    /**
-     * Alternate constructor. Uses default instrumentation runner.
-     *
-     * @param packageName the Android application package that contains the tests to run
-     * @param remoteDevice the Android device to execute tests on
-     */
-    public RemoteAndroidTestRunner(String packageName,
-                                   IShellEnabledDevice remoteDevice) {
-        this(packageName, null, remoteDevice);
-    }
-
-    @Override
-    public String getPackageName() {
-        return mPackageName;
-    }
-
-    @Override
-    public String getRunnerName() {
-        if (mRunnerName == null) {
-            return DEFAULT_RUNNER_NAME;
-        }
-        return mRunnerName;
-    }
 
     /**
      * Returns the complete instrumentation component path.
@@ -199,69 +145,6 @@ public class RemoteAndroidTestRunner implements IRemoteAndroidTestRunner  {
     }
 
     @Override
-    public void run(ITestRunListener... listeners)
-            throws TimeoutException, AdbCommandRejectedException, ShellCommandUnresponsiveException,
-            IOException {
-        run(Arrays.asList(listeners));
-    }
-
-    @Override
-    public void run(Collection<ITestRunListener> listeners)
-            throws TimeoutException, AdbCommandRejectedException, ShellCommandUnresponsiveException,
-            IOException {
-        final String runCaseCommandStr = String.format("am instrument -w %1$s-r %2$s %3$s",
-                getRunOptions(), getArgsCommand(), getRunnerPath());
-        Log.i(LOG_TAG, String.format("Running %1$s on %2$s", runCaseCommandStr,
-                mRemoteDevice.getName()));
-        String runName = mRunName == null ? mPackageName : mRunName;
-        mParser = new InstrumentationResultParser(runName, listeners);
-
-        try {
-            mRemoteDevice.executeShellCommand(runCaseCommandStr, mParser, mMaxTimeToOutputResponse,
-                    mMaxTimeUnits);
-        } catch (IOException e) {
-            Log.w(LOG_TAG, String.format("IOException %1$s when running tests %2$s on %3$s",
-                    e.toString(), getPackageName(), mRemoteDevice.getName()));
-            // rely on parser to communicate results to listeners
-            mParser.handleTestRunFailed(e.toString());
-            throw e;
-        } catch (ShellCommandUnresponsiveException e) {
-            Log.w(LOG_TAG, String.format(
-                    "ShellCommandUnresponsiveException %1$s when running tests %2$s on %3$s",
-                    e.toString(), getPackageName(), mRemoteDevice.getName()));
-            mParser.handleTestRunFailed(String.format(
-                    "Failed to receive adb shell test output within %1$d ms. " +
-                    "Test may have timed out, or adb connection to device became unresponsive",
-                    mMaxTimeToOutputResponse));
-            throw e;
-        } catch (TimeoutException e) {
-            Log.w(LOG_TAG, String.format(
-                    "TimeoutException when running tests %1$s on %2$s", getPackageName(),
-                    mRemoteDevice.getName()));
-            mParser.handleTestRunFailed(e.toString());
-            throw e;
-        } catch (AdbCommandRejectedException e) {
-            Log.w(LOG_TAG, String.format(
-                    "AdbCommandRejectedException %1$s when running tests %2$s on %3$s",
-                    e.toString(), getPackageName(), mRemoteDevice.getName()));
-            mParser.handleTestRunFailed(e.toString());
-            throw e;
-        }
-    }
-
-    @NonNull private String getRunOptions() {
-        return mRunOptions;
-    }
-
-    /**
-     * Sets options for the am instrument command.
-     * See com/android/commands/am/Am.java for full list of options.
-     */
-    public void setRunOptions(@NonNull String options) {
-        mRunOptions = options + " ";
-    }
-
-    @Override
     public void cancel() {
         if (mParser != null) {
             mParser.cancel();
@@ -281,5 +164,15 @@ public class RemoteAndroidTestRunner implements IRemoteAndroidTestRunner  {
             commandBuilder.append(argCmd);
         }
         return commandBuilder.toString();
+    }
+
+    @Override
+    public String getPackageName() {
+        return null;
+    }
+
+    @Override
+    public String getRunnerName() {
+        return null;
     }
 }

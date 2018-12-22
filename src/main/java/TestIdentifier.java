@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-package com.android.ddmlib.testrunner;
-
 /**
  * Identifies a parsed instrumentation test.
  */

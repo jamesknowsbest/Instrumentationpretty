@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-package com.android.ddmlib.testrunner;
-
-import com.android.ddmlib.IShellOutputReceiver;
-import com.android.ddmlib.Log;
-import com.android.ddmlib.MultiLineReceiver;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -238,8 +232,8 @@ public class InstrumentationResultParser extends MultiLineReceiver {
      * @see MultiLineReceiver#processNewLines
      */
     @Override
-    public void processNewLines(String[] lines) {
-        for (String line : lines) {
+    public void processNewLines(String line2) {
+        for (String line : line2) {
             parse(line);
             // in verbose mode, dump all adb output to log
             Log.v(LOG_TAG, line);

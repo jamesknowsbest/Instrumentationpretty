@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-package com.android.ddmlib.testrunner;
 
 import java.util.Map;
 

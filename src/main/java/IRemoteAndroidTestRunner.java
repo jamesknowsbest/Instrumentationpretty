@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-package com.android.ddmlib.testrunner;
-
-import com.android.ddmlib.AdbCommandRejectedException;
-import com.android.ddmlib.IDevice;
-import com.android.ddmlib.ShellCommandUnresponsiveException;
-import com.android.ddmlib.TimeoutException;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
@@ -206,41 +199,6 @@ public interface IRemoteAndroidTestRunner {
      * @param runName
      */
     public void setRunName(String runName);
-
-    /**
-     * Execute this test run.
-     * <p/>
-     * Convenience method for {@link #run(Collection)}.
-     *
-     * @param listeners listens for test results
-     * @throws TimeoutException in case of a timeout on the connection.
-     * @throws AdbCommandRejectedException if adb rejects the command
-     * @throws ShellCommandUnresponsiveException if the device did not output any test result for
-     * a period longer than the max time to output.
-     * @throws IOException if connection to device was lost.
-     *
-     * @see #setMaxtimeToOutputResponse(int)
-     */
-    public void run(ITestRunListener... listeners)
-            throws TimeoutException, AdbCommandRejectedException, ShellCommandUnresponsiveException,
-            IOException;
-
-    /**
-     * Execute this test run.
-     *
-     * @param listeners collection of listeners for test results
-     * @throws TimeoutException in case of a timeout on the connection.
-     * @throws AdbCommandRejectedException if adb rejects the command
-     * @throws ShellCommandUnresponsiveException if the device did not output any test result for
-     * a period longer than the max time to output.
-     * @throws IOException if connection to device was lost.
-     *
-     * @see #setMaxtimeToOutputResponse(int)
-     */
-    public void run(Collection<ITestRunListener> listeners)
-            throws TimeoutException, AdbCommandRejectedException, ShellCommandUnresponsiveException,
-            IOException;
-
     /**
      * Requests cancellation of this test run.
      */

@@ -13,11 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.ddmlib.testrunner;
-
-import com.android.ddmlib.Log;
-import com.android.ddmlib.testrunner.TestResult.TestStatus;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -138,7 +133,7 @@ public class TestRunResult {
     public Set<TestIdentifier> getCompletedTests() {
         Set<TestIdentifier> completedTests = new LinkedHashSet<TestIdentifier>();
         for (Map.Entry<TestIdentifier, TestResult> testEntry : getTestResults().entrySet()) {
-            if (!testEntry.getValue().getStatus().equals(TestStatus.INCOMPLETE)) {
+            if (!testEntry.getValue().getStatus().equals(TestResult.TestStatus.INCOMPLETE)) {
                 completedTests.add(testEntry.getKey());
             }
         }
@@ -270,13 +265,13 @@ public class TestRunResult {
      * @param status
      * @param trace
      */
-    void reportTestFailure(TestIdentifier test, TestStatus status, String trace) {
+    void reportTestFailure(TestIdentifier test, TestResult.TestStatus status, String trace) {
         TestResult result = mTestResults.get(test);
         if (result == null) {
             Log.d(LOG_TAG, String.format("Received test failure for %s without testStarted", test));
             result = new TestResult();
             mTestResults.put(test, result);
-        } else if (result.getStatus().equals(TestStatus.PASSED)) {
+        } else if (result.getStatus().equals(TestResult.TestStatus.PASSED)) {
             // this should never happen...
             Log.d(LOG_TAG, String.format("Replacing passed result for %s", test));
             mNumPassedTests--;
@@ -286,10 +281,10 @@ public class TestRunResult {
         switch (status) {
             case ERROR:
                 mNumErrorTests++;
-                result.setStatus(TestStatus.ERROR);
+                result.setStatus(TestResult.TestStatus.ERROR);
                 break;
             case FAILURE:
-                result.setStatus(TestStatus.FAILURE);
+                result.setStatus(TestResult.TestStatus.FAILURE);
                 mNumFailedTests++;
                 break;
         }
@@ -314,8 +309,8 @@ public class TestRunResult {
 
         result.setEndTime(System.currentTimeMillis());
         result.setMetrics(testMetrics);
-        if (result.getStatus().equals(TestStatus.INCOMPLETE)) {
-            result.setStatus(TestStatus.PASSED);
+        if (result.getStatus().equals(TestResult.TestStatus.INCOMPLETE)) {
+            result.setStatus(TestResult.TestStatus.PASSED);
             mNumPassedTests++;
             return true;
         }
