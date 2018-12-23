@@ -1,6 +1,8 @@
 # InstrumentationPretty
   This is a short java program implemented to accept the standard instrumentation output from Android test and create HTML(WIP) and  junit XML reports.
 
+  **WARNING**: This project is a work in progress and this software is used as-is without any warranty. Please use your own judgement when using this for your project. 
+
 ## Why would someone need this? 
   [In some cases](https://stackoverflow.com/q/50765454/8016330), you may only need to run an adb command to execute the tests. In this case, the only output you would receive is the standard instrumentation output which isn't easily human readable. It also doesn't produce a junit XML report which you can us in [Jenkins](https://plugins.jenkins.io/test-results-analyzer) or similar software. 
 
