@@ -6,9 +6,10 @@
  * For more details take a look at the Java Quickstart chapter in the Gradle
  * user guide available at https://docs.gradle.org/2.11/userguide/tutorial_java_projects.html
  */
-
-// Apply the java plugin to add support for Java
-apply plugin: 'java'
+plugins {
+  id "com.github.johnrengelman.shadow" version "4.0.3"
+  id "java"
+}
 
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -17,10 +18,10 @@ repositories {
     jcenter()
 }
 
-sourceSets {
-    main.resources.srcDir 'src/main/java'
-    test.resources.srcDir 'src/test/java'
-}
+// sourceSets {
+//     main.resources.srcDir 'src/main/java'
+//     test.resources.srcDir 'src/test/java'
+// }
 
 // In this section you declare the dependencies for your production and test code
 dependencies {
@@ -31,6 +32,7 @@ dependencies {
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
     // https://mvnrepository.com/artifact/com.android/common
     compile group: 'com.android', name: 'common', version: 'r16'
+
 
 
     // Declare the dependency for your favourite test framework you want to use in your tests.

@@ -10,10 +10,10 @@
 ## example usage
 
 ### Building
- `./gradlew clean build`
+ `./gradlew clean shadowJar`
 
 ### Running
- `java -classpath ./build/libs/Instrumentationpretty.jar InstrumentationPretty src/test/resources/c6a3727a-0ab2-42e7-850d-10a2ba1be62c.txt`
+ `java -classpath ./build/libs/Instrumentationpretty-all.jar InstrumentationPretty /absolute/path/to/instrumentation_log_file`
 
- 
+
 

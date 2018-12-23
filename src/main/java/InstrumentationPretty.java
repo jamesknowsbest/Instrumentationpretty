@@ -26,6 +26,10 @@ public class InstrumentationPretty {
         XmlTestRunListener testListener = new XmlTestRunListener();
         InstrumentationResultParser parser = new InstrumentationResultParser("DeviceFarm Test", testListener);
         
+        File reportDir = new File(System.getProperty("user.dir") + "/reports");
+        reportDir.mkdir();
+        testListener.setReportDir(reportDir);
+        
         //read in instrumentation output file
         File file = new File(this.filePath); 
   
@@ -36,11 +40,15 @@ public class InstrumentationPretty {
         while ((line = br.readLine()) != null){
            lines.add(line);
         } 
+        System.out.println("printing lines: ");
+        System.out.println(Arrays.toString(lines.toArray(new String[0])));
         parser.processNewLines(lines.toArray(new String[0]));
-        File reportDir = new File(System.getProperty("user.dir") + "/reports");
-        reportDir.mkdir();
-        testListener.setReportDir(reportDir);
-        testListener.createOutputResultStream(reportDir);
+
+        System.out.println("calling done method to write files");
+        parser.done();
+        
+        // testListener.createOutputResultStream(reportDir);
+        // testListener.testRunEnded(elapsedTime, runMetrics);
     }
 
     public static void main(String args[]){
