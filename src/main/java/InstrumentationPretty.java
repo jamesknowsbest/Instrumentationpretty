@@ -43,7 +43,6 @@ public class InstrumentationPretty {
         // Reading data using readLine 
         String input = null;
         while( (input = reader.readLine()) != null ){
-            System.out.println(input);
             lines.add(input);
         }
 
@@ -72,11 +71,14 @@ public class InstrumentationPretty {
         }
 
         String outputFilePath = cmd.getOptionValue("output");
-
         try {
-            new InstrumentationPretty(outputFilePath).processInsturmentationOutput();
+            if(outputFilePath != null){
+                new InstrumentationPretty(outputFilePath).processInsturmentationOutput();
+            }else{
+                new InstrumentationPretty("").processInsturmentationOutput();
+            }        
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }   
     }
 }
