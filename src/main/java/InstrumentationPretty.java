@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +22,9 @@ public class InstrumentationPretty {
         this.filePath = filePath;
     }
 
+    public InstrumentationPretty(){
+    }
+
     public void processInsturmentationOutput() throws IOException{
         //create test listener and parser
         XmlTestRunListener testListener = new XmlTestRunListener();
@@ -31,17 +35,28 @@ public class InstrumentationPretty {
         testListener.setReportDir(reportDir);
         
         //read in instrumentation output file
-        File file = new File(this.filePath); 
-  
-        BufferedReader br = new BufferedReader(new FileReader(file)); 
-        
+        //File file = new File(this.filePath); 
         List<String> lines = new ArrayList<String>(); 
-        String line;
-        while ((line = br.readLine()) != null){
-           lines.add(line);
-        } 
+
+        // BufferedReader br = new BufferedReader(new FileReader(file)); 
+        // String line;
+        // while ((line = br.readLine()) != null){
+        //    lines.add(line);
+        // } 
+        
+        
+        //read lines from STDIN 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 
+        // Reading data using readLine 
+        String input = null;
+        while( (input = reader.readLine()) != null ){
+            System.out.println(input);
+            lines.add(input);
+        }
+
         System.out.println("printing lines: ");
         System.out.println(Arrays.toString(lines.toArray(new String[0])));
+
         parser.processNewLines(lines.toArray(new String[0]));
 
         System.out.println("calling done method to write files");
@@ -54,7 +69,7 @@ public class InstrumentationPretty {
     public static void main(String args[]){
         System.out.println(Arrays.toString(args));
         try {
-            new InstrumentationPretty(args[0]).processInsturmentationOutput();
+            new InstrumentationPretty().processInsturmentationOutput();
         } catch (IOException e) {
             e.printStackTrace();
         }
