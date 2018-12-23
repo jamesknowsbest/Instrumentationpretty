@@ -13,7 +13,15 @@
  `./gradlew clean shadowJar`
 
 ### Running
+
+#### Using with a ADB instrument command 
  `java -classpath ./build/libs/Instrumentationpretty-all.jar InstrumentationPretty /absolute/path/to/instrumentation_log_file`
 
+#### Using with an existing file
+`cat /path/to/instrument/log/file | java -classpath /path/to/Instrumentationpretty-all.jar InstrumentationPretty`
 
+#### Specify output directory 
+`cat /path/to/instrument/log/file | java -classpath /path/to/Instrumentationpretty-all.jar InstrumentationPretty -o <yourDirectoryHere>`
+
+**Note**: is the directory doesn't exist it will create it
 
