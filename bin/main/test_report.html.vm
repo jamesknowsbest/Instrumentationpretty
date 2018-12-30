@@ -122,51 +122,53 @@
     </header>
     <section id="test-suites">
       #foreach( $suite in $test_suites.keySet() )
-          <p>Key: $suite -> Value: $test_suites.get($suite)</p>
-          <section class="test-suite #if($test_suites.get($suite).mStatus == 'FAILURE') 'failing' #{else} 'passing' #end" id="$suite.mTestName">
-          <section class="heading" onclick="toggleTests(this);">
-            <h3 class="title">$suite.mTestName</h3>
-          </section>
-          <section class="tests">
-          <p>$test_suites.get($suite).getStatus()</p>
-          <!-- <table>
-            <% info[:tests].each_with_index do |test, index| %>
-              <% detail_class = test[:name].gsub(/\s/,'') %>
-              <tr class="test <%= test[:failing] ? 'failing' : 'passing'%> <%= index % 2 != 0 ? 'odd' :''%>"  onclick="toggleDetails('<%= detail_class %>');">
+        <p>Key: $suite -> Value: $test_suites.get($suite)</p>
+        $set($detail_class = $suite.mTestName)
+        <section class="test-suite #if($test_suites.get($suite).getStatus() == 'FAILURE') 'failing' #{else} 'passing' #end" id="$suite.mTestName">
+        <section class="heading" onclick="toggleTests(this);">
+          <h3 class="title">$suite.mTestName</h3>
+        </section>
+        <section class="tests">
+        <p>$test_suites.get($suite).getStatus()</p>
+        <table>
+          <!-- <% info[:tests].each_with_index do |test, index| %>
+            <% detail_class = test[:name].gsub(/\s/,'') %> -->
+            <tr class="test #if($test_suites.get($suite).getStatus() == 'FAILURE') 'failing' #{else} 'passing' #end $if($velocityCount % 2 != 0) 'odd' ${else} '' #end " onclick="toggleDetails('$detail_class');">
+              <td>
+                #if($test_suites.get($suite).getStartTime() && $test_suites.get($suite).getEndTime())
+                  $set($total_time_in_seconds = $test_suites.get($suite).getEndTime() - $test_suites.get($suite).getStartTime())
+                  <h3 class="time">$total_time_in_seconds s</h3>
+                #end
+              </td>
+              <td><h3 class="title">$test_suites.get($suite).getTestName()</h3></td>
+            </tr>
+            <!--<% if test[:reason] || test[:snippet] || !test[:screenshots].empty? %>
+              <tr class="details <%= test[:failing] ? 'failing' : 'passing'%> <%= detail_class %>">
+                <td></td>
                 <td>
-                  <% if test[:time] %>
-                    <h3 class="time"><%= test[:time] %>s</h3>
+                  <% if test[:reason] %>
+                    <section class="test-detail reason"><%= test[:reason] %></section>
+                  <% end %>
+                  <% if test[:snippet] %>
+                    <section class="test-detail snippet"><%= test[:snippet] %></section>
+                    <section class="test-detail"><%= test[:file] %></section>
+                  <% end %>
+                  <% if !test[:screenshots].empty? %>
+                    <section class="test-detail">
+                      <% test[:screenshots].each_with_index do |screenshot, idx| %>
+                        <a href="javascript:toggleScreenshot('<%=test[:name] %>', <%=index %>)">
+                          <img class="screenshot" id="screenshot-<%=test[:name] %>-<%=index %>" src="<%=screenshot %>" />
+                        </a>
+                      <% end %>
+                    </section>
                   <% end %>
                 </td>
-                <td><h3 class="title"><%= test[:name] %></h3></td>
               </tr>
-              <% if test[:reason] || test[:snippet] || !test[:screenshots].empty? %>
-                <tr class="details <%= test[:failing] ? 'failing' : 'passing'%> <%= detail_class %>">
-                  <td></td>
-                  <td>
-                    <% if test[:reason] %>
-                      <section class="test-detail reason"><%= test[:reason] %></section>
-                    <% end %>
-                    <% if test[:snippet] %>
-                      <section class="test-detail snippet"><%= test[:snippet] %></section>
-                      <section class="test-detail"><%= test[:file] %></section>
-                    <% end %>
-                    <% if !test[:screenshots].empty? %>
-                      <section class="test-detail">
-                        <% test[:screenshots].each_with_index do |screenshot, idx| %>
-                          <a href="javascript:toggleScreenshot('<%=test[:name] %>', <%=index %>)">
-                            <img class="screenshot" id="screenshot-<%=test[:name] %>-<%=index %>" src="<%=screenshot %>" />
-                          </a>
-                        <% end %>
-                      </section>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
             <% end %>
-            </table> -->
-          </section>
-      #end
-    <footer>Report generated with <a href="https://github.com/jamesknowsbest/Instrumentationpretty">InstrumentionPretty</a>, The <a href="https://github.com/supermarin/xcpretty/blob/master/assets/report.html.erb">XCPretty template</a>, and <a href="http://velocity.apache.org/">Apache Velocity</a></footer>
-  </body>
+          <% end %> --> 
+          </table>
+      #end 
+    </section>
+  <footer>Report generated with <a href="https://github.com/jamesknowsbest/Instrumentationpretty">InstrumentionPretty</a>, the <a href="https://github.com/supermarin/xcpretty/blob/master/assets/report.html.erb">XCPretty template</a>, and <a href="http://velocity.apache.org/">Apache Velocity</a></footer>
+</body>
 </html>
