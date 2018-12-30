@@ -34,6 +34,12 @@ dependencies {
     compile group: 'org.apache.velocity', name: 'velocity', version: '1.7'
     // https://mvnrepository.com/artifact/org.apache.velocity/velocity-tools
     compile group: 'org.apache.velocity', name: 'velocity-tools', version: '2.0'
+    // https://mvnrepository.com/artifact/org.apache.commons/commons-collections4
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.2'
+    // https://mvnrepository.com/artifact/commons-lang/commons-lang
+    compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+
+
 
     // Declare the dependency for your favourite test framework you want to use in your tests.
     // TestNG is also supported by the Gradle Test task. Just change the

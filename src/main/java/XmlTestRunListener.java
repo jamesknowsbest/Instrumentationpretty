@@ -29,10 +29,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
+import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
-import org.apache.velocity.runtime;
-import org.apache.velocity.runtime.resource.loader;
 
 /**
  * Writes JUnit results to an XML files in a format consistent with
@@ -161,15 +161,7 @@ public class XmlTestRunListener implements ITestRunListener {
             if (input == null) {
                 throw new IOException("Template file doesn't exist");
             }
-
             VelocityContext context = new VelocityContext();
-
-            if (properties != null) {
-                stringfyNulls(properties);
-                for (Map.Entry<String, Object> property : properties.entrySet()) {
-                    context.put(property.getKey(), property.getValue());
-                }
-            }
 
             Template template = ve.getTemplate("test_report.html.vm", "UTF-8");
             // TODO: insert build info
