@@ -20,6 +20,8 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,6 +31,8 @@ import java.util.TimeZone;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.runtime;
+import org.apache.velocity.runtime.resource.loader;
 
 /**
  * Writes JUnit results to an XML files in a format consistent with
@@ -147,12 +151,30 @@ public class XmlTestRunListener implements ITestRunListener {
                     "http://xmlpull.org/v1/doc/features.html#indent-output", true);
 
             //create velocity object 
-            VelocityEngine velocityEngine = new VelocityEngine();
-            velocityEngine.init();
-            Template t = velocityEngine.getTemplate("index.vm");
+            VelocityEngine ve = new VelocityEngine();
+            ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
+            ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
 
+            ve.init();
+
+            InputStream input = this.getClass().getClassLoader().getResourceAsStream("test_report.html.vm");
+            if (input == null) {
+                throw new IOException("Template file doesn't exist");
+            }
+
+            VelocityContext context = new VelocityContext();
+
+            if (properties != null) {
+                stringfyNulls(properties);
+                for (Map.Entry<String, Object> property : properties.entrySet()) {
+                    context.put(property.getKey(), property.getValue());
+                }
+            }
+
+            Template template = ve.getTemplate("test_report.html.vm", "UTF-8");
             // TODO: insert build info
             printTestResults(serializer, timestamp, elapsedTime);
+            
             serializer.endDocument();
             String msg = String.format("XML test result file generated at %s. Total tests %d, " +
                     "Failed %d, Error %d", getAbsoluteReportPath(), mRunResult.getNumTests(),
