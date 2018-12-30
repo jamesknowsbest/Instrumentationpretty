@@ -162,12 +162,12 @@ public class XmlTestRunListener implements ITestRunListener {
                 throw new IOException("Template file doesn't exist");
             }
             VelocityContext context = new VelocityContext();
-
-            Template template = ve.getTemplate("test_report.html.vm", "UTF-8");
             // TODO: insert build info
-            printTestResults(serializer, timestamp, elapsedTime);
+            printTestResults(serializer,context, timestamp, elapsedTime);
             
             serializer.endDocument();
+            Template template = ve.getTemplate("test_report.html.vm", "UTF-8");
+
             String msg = String.format("XML test result file generated at %s. Total tests %d, " +
                     "Failed %d, Error %d", getAbsoluteReportPath(), mRunResult.getNumTests(),
                     mRunResult.getNumFailedTests(), mRunResult.getNumErrorTests());
@@ -230,7 +230,7 @@ public class XmlTestRunListener implements ITestRunListener {
         return mRunResult.getName();
     }
 
-    void printTestResults(KXmlSerializer serializer, String timestamp, long elapsedTime)
+    void printTestResults(KXmlSerializer serializer, VelocityContext context, String timestamp, long elapsedTime)
             throws IOException {
         serializer.startTag(ns, TESTSUITE);
         String name = getTestSuiteName();
