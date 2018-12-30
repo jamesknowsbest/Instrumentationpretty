@@ -19,10 +19,12 @@ import org.kxml2.io.KXmlSerializer;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -157,17 +159,26 @@ public class XmlTestRunListener implements ITestRunListener {
 
             ve.init();
 
+            //get template from jar and confirm it's there
             InputStream input = this.getClass().getClassLoader().getResourceAsStream("test_report.html.vm");
             if (input == null) {
                 throw new IOException("Template file doesn't exist");
             }
+            //close the stream as the file's confirmed to be present and not needed now
+            input.close();
+            //create context object to hold test results and map to variables
             VelocityContext context = new VelocityContext();
             // TODO: insert build info
             printTestResults(serializer,context, timestamp, elapsedTime);
-            
             serializer.endDocument();
+            //get the velocity template
             Template template = ve.getTemplate("test_report.html.vm", "UTF-8");
-
+            //merge the context object with the template and write to a string which can be written to a html file
+            FileWriter fw = new FileWriter(this.getAbsoluteReportPath() + "/" + TEST_RESULT_FILE_PREFIX + ".html");
+            StringWriter writer = new StringWriter();
+            template.merge( context, writer );
+            fw.write(writer.toString());
+            fw.close();
             String msg = String.format("XML test result file generated at %s. Total tests %d, " +
                     "Failed %d, Error %d", getAbsoluteReportPath(), mRunResult.getNumTests(),
                     mRunResult.getNumFailedTests(), mRunResult.getNumErrorTests());
