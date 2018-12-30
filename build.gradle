@@ -18,11 +18,6 @@ repositories {
     jcenter()
 }
 
-// sourceSets {
-//     main.resources.srcDir 'src/main/java'
-//     test.resources.srcDir 'src/test/java'
-// }
-
 // In this section you declare the dependencies for your production and test code
 dependencies {
     // The production code uses the SLF4J logging API at compile time
@@ -30,7 +25,6 @@ dependencies {
     compile 'net.sf.kxml:kxml2:2.3.0'
     // https://mvnrepository.com/artifact/commons-cli/commons-cli
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
-
     // https://mvnrepository.com/artifact/com.google.guava/guava
     compile group: 'com.google.guava', name: 'guava', version: '19.0'
     // https://mvnrepository.com/artifact/com.android/common

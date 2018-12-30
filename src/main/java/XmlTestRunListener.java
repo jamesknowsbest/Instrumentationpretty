@@ -26,6 +26,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.Template;
+import org.apache.velocity.VelocityContext;
 
 /**
  * Writes JUnit results to an XML files in a format consistent with
@@ -142,6 +145,12 @@ public class XmlTestRunListener implements ITestRunListener {
             serializer.startDocument("UTF-8", null);
             serializer.setFeature(
                     "http://xmlpull.org/v1/doc/features.html#indent-output", true);
+
+            //create velocity object 
+            VelocityEngine velocityEngine = new VelocityEngine();
+            velocityEngine.init();
+            Template t = velocityEngine.getTemplate("index.vm");
+
             // TODO: insert build info
             printTestResults(serializer, timestamp, elapsedTime);
             serializer.endDocument();
