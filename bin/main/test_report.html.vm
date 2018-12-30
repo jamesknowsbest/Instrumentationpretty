@@ -122,13 +122,14 @@
     </header>
     <section id="test-suites">
       #foreach( $suite in $test_suites.keySet() )
-          <li>Key: $suite -> Value: $test_suites.get($suite)</li>
+          <p>Key: $suite -> Value: $test_suites.get($suite)</p>
           <section class="test-suite #if($test_suites.get($suite).mStatus == 'FAILURE') 'failing' #{else} 'passing' #end" id="$suite.mTestName">
           <section class="heading" onclick="toggleTests(this);">
             <h3 class="title">$suite.mTestName</h3>
           </section>
           <section class="tests">
-          <table>
+          <p>$test_suites.get($suite).getStatus()</p>
+          <!-- <table>
             <% info[:tests].each_with_index do |test, index| %>
               <% detail_class = test[:name].gsub(/\s/,'') %>
               <tr class="test <%= test[:failing] ? 'failing' : 'passing'%> <%= index % 2 != 0 ? 'odd' :''%>"  onclick="toggleDetails('<%= detail_class %>');">
@@ -163,9 +164,9 @@
                 </tr>
               <% end %>
             <% end %>
-            </table>
+            </table> -->
           </section>
       #end
-    <footer>Report generated with <a href="https://github.com/jamesknowsbest/Instrumentationpretty">InstrumentionPretty</a> and <a href="http://velocity.apache.org/">Apache Velocity</a></footer>
+    <footer>Report generated with <a href="https://github.com/jamesknowsbest/Instrumentationpretty">InstrumentionPretty</a>, The <a href="https://github.com/supermarin/xcpretty/blob/master/assets/report.html.erb">XCPretty template</a>, and <a href="http://velocity.apache.org/">Apache Velocity</a></footer>
   </body>
 </html>

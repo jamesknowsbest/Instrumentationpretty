@@ -174,7 +174,7 @@ public class XmlTestRunListener implements ITestRunListener {
             //get the velocity template
             Template template = ve.getTemplate("test_report.html.vm", "UTF-8");
             //merge the context object with the template and write to a string which can be written to a html file
-            FileWriter fw = new FileWriter(this.getAbsoluteReportPath() + "/" + TEST_RESULT_FILE_PREFIX + ".html");
+            FileWriter fw = new FileWriter(this.mReportDir + "/" + TEST_RESULT_FILE_PREFIX + ".html");
             StringWriter writer = new StringWriter();
             template.merge( context, writer );
             fw.write(writer.toString());
@@ -185,6 +185,7 @@ public class XmlTestRunListener implements ITestRunListener {
             Log.logAndDisplay(Log.LogLevel.INFO, LOG_TAG, msg);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Failed to generate report data");
+            e.printStackTrace();
             // TODO: consider throwing exception
         } finally {
             if (stream != null) {
