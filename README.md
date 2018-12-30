@@ -25,5 +25,7 @@
 #### Specify output directory 
 `cat /path/to/instrument/log/file | java -classpath /path/to/Instrumentationpretty-all.jar InstrumentationPretty -o <yourDirectoryHere>`
 
-**Note**: if the directory doesn't exist it will be created
+**Note**: if the directory doesn't exist it will be created. By default the output directory is the current working directory/reports as shown by this line in InstrumentationPretty.java
+
+`reportDir = new File(System.getProperty("user.dir") + "/reports");`
 
