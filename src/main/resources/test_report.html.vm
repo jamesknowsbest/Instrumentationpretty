@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Test Results | xcpretty</title>
+    <title>Test Results | InstrumentationPretty</title>
     <style type="text/css">
       body { font-family:Avenir Next, Helvetica Neue, sans-serif; color: #4A4A4A; background-color: #F0F3FB; margin:0;}
       h1 { font-weight: normal; font-size: 24px; margin: 10px 0 0 0;}

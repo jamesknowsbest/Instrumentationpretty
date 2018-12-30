@@ -255,6 +255,11 @@ public class XmlTestRunListener implements ITestRunListener {
         serializer.attribute(ns, TIMESTAMP, timestamp);
         serializer.attribute(ns, HOSTNAME, mHostName);
 
+        //add test results to velocity context 
+        context.put("test_count", Integer.toString(mRunResult.getNumTests()));
+        context.put("fail_count", Integer.toString(mRunResult.getNumFailedTests()));
+        context.put("test_suites",mRunResult.getTestResults());
+
         serializer.startTag(ns, PROPERTIES);
         setPropertiesAttributes(serializer, ns);
         serializer.endTag(ns, PROPERTIES);
