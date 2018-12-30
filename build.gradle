@@ -37,6 +37,8 @@ dependencies {
     compile group: 'com.android', name: 'common', version: 'r16'
     // https://mvnrepository.com/artifact/org.apache.velocity/velocity
     compile group: 'org.apache.velocity', name: 'velocity', version: '1.7'
+    // https://mvnrepository.com/artifact/org.apache.velocity/velocity-tools
+    compile group: 'org.apache.velocity', name: 'velocity-tools', version: '2.0'
 
     // Declare the dependency for your favourite test framework you want to use in your tests.
     // TestNG is also supported by the Gradle Test task. Just change the
