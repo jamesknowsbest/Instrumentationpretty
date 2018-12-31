@@ -123,20 +123,18 @@
     <section id="test-suites">
       #foreach( $suite in $test_suites.keySet() )
         <p>Key: $suite -> Value: $test_suites.get($suite)</p>
-        $set($detail_class = $suite.mTestName)
+        #set($detail_class = $suite.mTestName)
         <section class="test-suite #if($test_suites.get($suite).getStatus() == 'FAILURE') 'failing' #{else} 'passing' #end" id="$suite.mTestName">
         <section class="heading" onclick="toggleTests(this);">
-          <h3 class="title">$suite.mTestName</h3>
+          <h3 class="title">$suite.getTestName()</h3>
         </section>
         <section class="tests">
         <p>$test_suites.get($suite).getStatus()</p>
         <table>
-          <!-- <% info[:tests].each_with_index do |test, index| %>
-            <% detail_class = test[:name].gsub(/\s/,'') %> -->
             <tr class="test #if($test_suites.get($suite).getStatus() == 'FAILURE') 'failing' #{else} 'passing' #end $if($velocityCount % 2 != 0) 'odd' ${else} '' #end " onclick="toggleDetails('$detail_class');">
               <td>
                 #if($test_suites.get($suite).getStartTime() && $test_suites.get($suite).getEndTime())
-                  $set($total_time_in_seconds = $test_suites.get($suite).getEndTime() - $test_suites.get($suite).getStartTime())
+                  #set($total_time_in_seconds = $test_suites.get($suite).getEndTime() - $test_suites.get($suite).getStartTime())
                   <h3 class="time">$total_time_in_seconds s</h3>
                 #end
               </td>
