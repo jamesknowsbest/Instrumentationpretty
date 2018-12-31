@@ -142,30 +142,21 @@
               </td>
               <td><h3 class="title">$test_suites.get($suite).getTestName()</h3></td>
             </tr>
-            <!--<% if test[:reason] || test[:snippet] || !test[:screenshots].empty? %>
-              <tr class="details <%= test[:failing] ? 'failing' : 'passing'%> <%= detail_class %>">
+            #if($test_suites.get($suite).getStackTrace() || $test_suites.get($suite).getStatus())
+              <tr class="details #if($test_suites.get($suite).getStatus() == 'FAILURE') 'failing' #{else} 'passing' #end $detail_class">
                 <td></td>
                 <td>
-                  <% if test[:reason] %>
-                    <section class="test-detail reason"><%= test[:reason] %></section>
-                  <% end %>
-                  <% if test[:snippet] %>
-                    <section class="test-detail snippet"><%= test[:snippet] %></section>
-                    <section class="test-detail"><%= test[:file] %></section>
-                  <% end %>
-                  <% if !test[:screenshots].empty? %>
-                    <section class="test-detail">
-                      <% test[:screenshots].each_with_index do |screenshot, idx| %>
-                        <a href="javascript:toggleScreenshot('<%=test[:name] %>', <%=index %>)">
-                          <img class="screenshot" id="screenshot-<%=test[:name] %>-<%=index %>" src="<%=screenshot %>" />
-                        </a>
-                      <% end %>
-                    </section>
-                  <% end %>
+                  #if($test_suites.get($suite).getStackTrace())
+                    <section class="test-detail reason">$test_suites.get($suite).getStackTrace()</section>
+                  #end
+                  #if($test_suites.get($suite).getMetrics())
+                    #foreach( $key in $test_suites.get($suite).getMetrics().keySet() ) 
+                      <section class="test-detail">$test_suites.get($suite).getMetrics().get($key)</section>
+                    #end
+                  #end
                 </td>
               </tr>
-            <% end %>
-          <% end %> --> 
+            #end
           </table>
       #end 
     </section>
