@@ -1,24 +1,8 @@
-# finder files
-.DS_Store
-
 # Compiled class file
 *.class
 
 # Log file
 *.log
-
-#vs code
-launch.json
-
-#generated reports dir
-./reports
-./reports/*
-./reports/test_result_*.xml
-
-#generated file from builds
-./bin/*
-./bin
-
 
 # BlueJ files
 *.ctxt
