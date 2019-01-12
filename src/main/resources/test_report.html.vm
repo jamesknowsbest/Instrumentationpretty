@@ -127,42 +127,50 @@
       #if($velocityCount % 2 != 0)odd#{else} #end
     #end
     <section id="test-suites">
-      #foreach( $suite in $test_suites.keySet() ) 
-         #set($detail_class = $suite.getTestName())
-          <section class="test-suite #failingorpassing($test_suites.get($suite).getStatus()) " id="$detail_class">
+         #set($detail_class = "Instrumentation_tests")
+          <section class="test-suite $suite_result " id="$detail_class">
             <section class="heading" onclick="toggleTests(this);">
               <h3 class="title">$detail_class</h3>
             </section>
             <section class="tests">
             <table>
-              <tr class="test #failingorpassing($test_suites.get($suite).getStatus()) #oddorevenrow($velocityCount)" onclick="toggleDetails('$detail_class');">
-                <td>
-                  #if($test_suites.get($suite).getStartTime() && $test_suites.get($suite).getEndTime())
-                    #set($total_time_in_seconds = $test_suites.get($suite).getEndTime() - $test_suites.get($suite).getStartTime())
-                    <h3 class="time">$total_time_in_seconds (seconds)</h3>
-                  #end
-                </td>
-                <td><h3 class="title">$detail_class</h3></td>
-              </tr>
-              #if($test_suites.get($suite).getStackTrace() || $test_suites.get($suite).getStatus())
-              <tr class="details #failingorpassing($test_suites.get($suite).getStatus()) $detail_class">
-                <td></td>
-                <td>
-                  #if($test_suites.get($suite).getStackTrace())
-                    <section class="test-detail reason">$test_suites.get($suite).getStackTrace()</section>
-                  #end
-                  #if($test_suites.get($suite).getMetrics())
-                    #foreach( $key in $test_suites.get($suite).getMetrics().keySet() ) 
-                      <section class="test-detail snippet">$test_suites.get($suite).getMetrics().get($key)</section>
+              #foreach($suite in $test_suites.keySet())
+                #set($test_name = $suite.getTestName())
+                #set($test_status = $test_suites.get($suite).getStatus())
+                #set($test_status = $test_suites.get($suite).getStatus())
+                #set($start_time = $test_suites.get($suite).getStartTime())
+                #set($end_time = $test_suites.get($suite).getEndTime())
+                #set($stack_trace = $test_suites.get($suite).getStackTrace())
+                #set($metrics = $test_suites.get($suite).getMetrics())
+
+                <tr class="test #failingorpassing($test_status) #oddorevenrow($velocityCount)" onclick="toggleDetails('$test_name');">
+                  <td>
+                    #if($start_time && $end_time)
+                      #set($total_time_in_seconds = $end_time - $start_time)
+                      <h3 class="time">$total_time_in_seconds (milliseconds)</h3>
                     #end
-                  #end
-                </td>
-              </tr>
-            #end
+                  </td>
+                  <td><h3 class="title">$test_name</h3></td>
+                </tr>
+                #if($stack_trace || $test_status)
+                  <tr class="details #failingorpassing($test_status) $test_name">
+                    <td></td>
+                    <td>
+                      #if($stack_trace)
+                        <section class="test-detail reason">$stack_trace</section>
+                      #end
+                      #if($metrics)
+                        #foreach( $key in $metrics ) 
+                          <section class="test-detail snippet">$metrics.get($key)</section>
+                        #end
+                      #end
+                    </td>
+                  </tr>
+                #end
+              #end
             </table>
           </section>
-          </section>
-      #end
+        </section> 
     </section>
   <footer>Report generated with <a href="https://github.com/jamesknowsbest/Instrumentationpretty">InstrumentionPretty</a>, the <a href="https://github.com/supermarin/xcpretty/blob/master/assets/report.html.erb">XCPretty template</a>, and <a href="http://velocity.apache.org/">Apache Velocity</a></footer>
 </body>

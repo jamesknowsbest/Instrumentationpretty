@@ -316,4 +316,20 @@ public class TestRunResult {
         }
         return false;
     }
+
+    /**
+     * 
+     * @return <code>passing</code> if suite had all successful passing tests, failing otherwise 
+     *  
+     */
+	public String getSuiteResult() {
+        //iterate through the test results to see if a test has a status other than passed
+        Map<TestIdentifier, TestResult> test_results = this.getTestResults();
+        for (Map.Entry<TestIdentifier,TestResult> entry : test_results.entrySet()) {
+            if(!entry.getValue().getStatus().equals(TestResult.TestStatus.PASSED)){
+                return "failing";
+            }
+        }         
+        return "passing";
+	}
 }

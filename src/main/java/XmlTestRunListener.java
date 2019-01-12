@@ -260,6 +260,7 @@ public class XmlTestRunListener implements ITestRunListener {
         context.put("test_count", Integer.toString(mRunResult.getNumTests()));
         context.put("fail_count", Integer.toString(mRunResult.getNumFailedTests()));
         context.put("test_suites",mRunResult.getTestResults());
+        context.put("suite_result",mRunResult.getSuiteResult());
 
         serializer.startTag(ns, PROPERTIES);
         setPropertiesAttributes(serializer, ns);
