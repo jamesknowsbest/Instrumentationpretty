@@ -1,9 +1,9 @@
 # InstrumentationPretty
-  This is a short java program implemented to accept the standard instrumentation output from Android test and create HTML(WIP) and  junit XML reports.
+  This is a short java program implemented to accept the standard instrumentation output from Android test and create HTML and  junit XML reports.
 
-  **WARNING**: This project is a work in progress(and mostly a proof of concept) and this software is used as-is without any warranty. Please use your own judgement when using this for your project. 
+  **WARNING**: This software is used as-is without any warranty. Please use your own judgement when using this for your project. 
 
-## Why would someone need this? 
+## What issue does this solve? 
   [In some cases](https://stackoverflow.com/q/50765454/8016330), you may only need to run an adb command to execute the tests. In this case, the only output you would receive is the standard instrumentation output which isn't easily human readable. It also doesn't produce a junit XML report which you can us in [Jenkins](https://plugins.jenkins.io/test-results-analyzer) or similar software. 
 
 ## Solution
@@ -32,4 +32,13 @@
 **example html output**
 
 ![example html output](https://i.imgur.com/3z9oPbR.png)
+
+**example junit output**
+```
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuite name="Instrumentation results" tests="1" failures="0" errors="0" time="2.798" timestamp="2019-01-13T01:08:25" hostname="localhost">
+  <properties />
+  <testcase name="testAlert" classname="com.amazonaws.devicefarm.android.referenceapp.Categories.AlertPageTest" time="0.0" />
+</testsuite>
+```
 
