@@ -29,3 +29,7 @@
 
 `reportDir = new File(System.getProperty("user.dir") + "/reports");`
 
+**example html output**
+
+![example html output](https://i.imgur.com/3z9oPbR.png)
+
