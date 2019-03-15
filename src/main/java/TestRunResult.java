@@ -39,6 +39,7 @@ public class TestRunResult {
     private int mNumErrorTests = 0;
     private int mNumPassedTests = 0;
     private int mNumInCompleteTests = 0;
+    private int mNumSkippedTests = 0;
     private String mRunFailureError = null;
 
     /**
@@ -96,7 +97,7 @@ public class TestRunResult {
      * Combine old and new metrics value
      *
      * @param existingValue
-     * @param value
+     * @param newValue
      * @return
      */
     private String combineValues(String existingValue, String newValue) {
@@ -208,6 +209,10 @@ public class TestRunResult {
         return mNumInCompleteTests;
     }
 
+    public int getNumSkippedTests() {
+        return mNumSkippedTests;
+    }
+
     /**
      * @return <code>true</code> if test run had any failed or error tests.
      */
@@ -247,6 +252,9 @@ public class TestRunResult {
                     break;
                 case PASSED:
                     mNumPassedTests--;
+                    break;
+                case SKIPPED:
+                    mNumSkippedTests--;
                     break;
                 case INCOMPLETE:
                     // ignore
@@ -317,6 +325,25 @@ public class TestRunResult {
         return false;
     }
 
+
+    public void reportTestSkipped(TestIdentifier test, Map<String, String> testMetrics) {
+        TestResult result = mTestResults.get(test);
+        if (result == null) {
+            Log.d(LOG_TAG, String.format("Received test ended for %s without testStarted", test));
+            result = new TestResult();
+            mTestResults.put(test, result);
+        } else {
+            mNumInCompleteTests--;
+        }
+
+        result.setEndTime(System.currentTimeMillis());
+        result.setMetrics(testMetrics);
+        if (result.getStatus().equals(TestResult.TestStatus.INCOMPLETE)) {
+            result.setStatus(TestResult.TestStatus.SKIPPED);
+            mNumSkippedTests++;
+        }
+    }
+
     /**
      * 
      * @return <code>passing</code> if suite had all successful passing tests, failing otherwise 
@@ -326,7 +353,8 @@ public class TestRunResult {
         //iterate through the test results to see if a test has a status other than passed
         Map<TestIdentifier, TestResult> test_results = this.getTestResults();
         for (Map.Entry<TestIdentifier,TestResult> entry : test_results.entrySet()) {
-            if(!entry.getValue().getStatus().equals(TestResult.TestStatus.PASSED)){
+            if(!entry.getValue().getStatus().equals(TestResult.TestStatus.PASSED)
+                    && !entry.getValue().getStatus().equals(TestResult.TestStatus.SKIPPED)){
                 return "failing";
             }
         }         

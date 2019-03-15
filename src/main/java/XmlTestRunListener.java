@@ -22,7 +22,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
@@ -54,10 +53,12 @@ public class XmlTestRunListener implements ITestRunListener {
     private static final String TESTCASE = "testcase";
     private static final String ERROR = "error";
     private static final String FAILURE = "failure";
+    private static final String SKIPPED = "skipped";
     private static final String ATTR_NAME = "name";
     private static final String ATTR_TIME = "time";
     private static final String ATTR_ERRORS = "errors";
     private static final String ATTR_FAILURES = "failures";
+    private static final String ATTR_SKIPPED = "skipped";
     private static final String ATTR_TESTS = "tests";
     //private static final String ATTR_TYPE = "type";
     //private static final String ATTR_MESSAGE = "message";
@@ -122,6 +123,11 @@ public class XmlTestRunListener implements ITestRunListener {
     }
 
     @Override
+    public void testSkipped(TestIdentifier test, Map<String, String> testMetrics) {
+        mRunResult.reportTestSkipped(test, testMetrics);
+    }
+
+    @Override
     public void testRunFailed(String errorMessage) {
         mRunResult.setRunFailureError(errorMessage);
     }
@@ -180,8 +186,9 @@ public class XmlTestRunListener implements ITestRunListener {
             fw.write(writer.toString());
             fw.close();
             String msg = String.format("XML test result file generated at %s. Total tests %d, " +
-                    "Failed %d, Error %d", getAbsoluteReportPath(), mRunResult.getNumTests(),
-                    mRunResult.getNumFailedTests(), mRunResult.getNumErrorTests());
+                    "Failed %d, Error %d, Skipped %d", getAbsoluteReportPath(), mRunResult.getNumTests(),
+                    mRunResult.getNumFailedTests(), mRunResult.getNumErrorTests(), mRunResult.getNumSkippedTests());
+
             Log.logAndDisplay(Log.LogLevel.INFO, LOG_TAG, msg);
         } catch (IOException e) {
             Log.e(LOG_TAG, "Failed to generate report data");
@@ -252,6 +259,7 @@ public class XmlTestRunListener implements ITestRunListener {
         serializer.attribute(ns, ATTR_TESTS, Integer.toString(mRunResult.getNumTests()));
         serializer.attribute(ns, ATTR_FAILURES, Integer.toString(mRunResult.getNumFailedTests()));
         serializer.attribute(ns, ATTR_ERRORS, Integer.toString(mRunResult.getNumErrorTests()));
+        serializer.attribute(ns, ATTR_SKIPPED, Integer.toString(mRunResult.getNumSkippedTests()));
         serializer.attribute(ns, ATTR_TIME, Double.toString((double) elapsedTime / 1000.f));
         serializer.attribute(ns, TIMESTAMP, timestamp);
         serializer.attribute(ns, HOSTNAME, mHostName);
@@ -259,6 +267,7 @@ public class XmlTestRunListener implements ITestRunListener {
         //add test results to velocity context 
         context.put("test_count", Integer.toString(mRunResult.getNumTests()));
         context.put("fail_count", Integer.toString(mRunResult.getNumFailedTests()));
+        context.put("skipped_count", Integer.toString(mRunResult.getNumSkippedTests()));
         context.put("test_suites",mRunResult.getTestResults());
         context.put("suite_result",mRunResult.getSuiteResult());
 
@@ -298,7 +307,20 @@ public class XmlTestRunListener implements ITestRunListener {
         serializer.attribute(ns, ATTR_TIME, Double.toString((double) elapsedTimeMs / 1000.f));
 
         if (!TestResult.TestStatus.PASSED.equals(testResult.getStatus())) {
-            String result = testResult.getStatus().equals(TestResult.TestStatus.FAILURE) ? FAILURE : ERROR;
+
+            String result;
+            switch (testResult.getStatus()) {
+                case FAILURE:
+                    result = FAILURE;
+                    break;
+                case SKIPPED:
+                    result = SKIPPED;
+                    break;
+                default:
+                    result = ERROR;
+            }
+
+//            String result = testResult.getStatus().equals(TestResult.TestStatus.FAILURE) ? FAILURE : ERROR;
             serializer.startTag(ns, result);
             // TODO: get message of stack trace ?
 //            String msg = testResult.getStackTrace();
@@ -307,7 +329,8 @@ public class XmlTestRunListener implements ITestRunListener {
 //            }
            // TODO: get class name of stackTrace exception
             //serializer.attribute(ns, ATTR_TYPE, testId.getClassName());
-            String stackText = sanitize(testResult.getStackTrace());
+            String stackTrace = testResult.getStackTrace();
+            String stackText = stackTrace == null ? "" : sanitize(stackTrace);
             serializer.text(stackText);
             serializer.endTag(ns, result);
         }
