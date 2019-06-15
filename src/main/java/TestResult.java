@@ -30,7 +30,9 @@ public class TestResult {
         /** Test passed */
         PASSED,
         /** Test started but not ended */
-        INCOMPLETE
+        INCOMPLETE,
+        /** Test skipped */
+        SKIPPED
     }
 
     private TestStatus mStatus;

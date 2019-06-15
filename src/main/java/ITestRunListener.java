@@ -82,6 +82,8 @@ public interface ITestRunListener {
      */
     public void testEnded(TestIdentifier test, Map<String, String> testMetrics);
 
+    public void testSkipped(TestIdentifier testId, Map<String, String> metrics);
+
     /**
      * Reports test run failed to complete due to a fatal error.
      *
