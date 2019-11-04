@@ -137,11 +137,13 @@
               #foreach($suite in $test_suites.keySet())
                 #set($test_name = $suite.getTestName())
                 #set($test_status = $test_suites.get($suite).getStatus())
-                #set($test_status = $test_suites.get($suite).getStatus())
                 #set($start_time = $test_suites.get($suite).getStartTime())
                 #set($end_time = $test_suites.get($suite).getEndTime())
+                #set($has_stack_trace = $test_suites.get($suite).getStackTrace() || false)
+                ## Only gets set if not null, check has_stack_trace first
                 #set($stack_trace = $test_suites.get($suite).getStackTrace())
                 #set($metrics = $test_suites.get($suite).getMetrics())
+                #set($has_metrics = $metrics.size() > 0)
 
                 <tr class="test #failingorpassing($test_status) #oddorevenrow($velocityCount)" onclick="toggleDetails('$test_name');">
                   <td>
@@ -152,14 +154,14 @@
                   </td>
                   <td><h3 class="title">$test_name</h3></td>
                 </tr>
-                #if($stack_trace || $test_status)
+                #if($has_stack_trace || $has_metrics)
                   <tr class="details #failingorpassing($test_status) $test_name">
                     <td></td>
                     <td>
-                      #if($stack_trace)
+                      #if($has_stack_trace)
                         <section class="test-detail reason">$stack_trace</section>
                       #end
-                      #if($metrics)
+                      #if($has_metrics)
                         #foreach( $key in $metrics ) 
                           <section class="test-detail snippet">$metrics.get($key)</section>
                         #end
