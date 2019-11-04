@@ -48,3 +48,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
     testCompile 'org.easymock:easymock:3.1'
 }
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'InstrumentationPretty'
+    }
+}
