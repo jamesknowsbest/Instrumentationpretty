@@ -93,12 +93,18 @@
           hideAll(document.querySelectorAll('.test.passing'));
           showAll(document.querySelectorAll('.test.failing'));
           hideAll(document.querySelectorAll('.test.skipped'));
+          hideAll(document.querySelectorAll('.details.passing'));
+          showAll(document.querySelectorAll('.details.failing'));
+          hideAll(document.querySelectorAll('.details.skipped'));
           hideAll(document.querySelectorAll('.test-suite.passing'));
           showAll(document.querySelectorAll('.test-suite.failing'));
         } else if (segment.id == "passing-segment") {
           hideAll(document.querySelectorAll('.test.failing'));
           showAll(document.querySelectorAll('.test.passing'));
           hideAll(document.querySelectorAll('.test.skipped'));
+          hideAll(document.querySelectorAll('.details.failing'));
+          showAll(document.querySelectorAll('.details.passing'));
+          hideAll(document.querySelectorAll('.details.skipped'));
           hideAll(document.querySelectorAll('.test-suite.failing'));
           showAll(document.querySelectorAll('.test-suite.passing'));
         }
