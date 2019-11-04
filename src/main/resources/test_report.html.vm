@@ -136,7 +136,7 @@
       </section>
     </header>
     #macro( map_status $testStatus)
-      #if($testStatus == 'FAILURE') failing #{elseif}($testStatus == 'SKIPPED') skipped #{else}passing#end
+      #if($testStatus == 'FAILURE' || $testStatus == 'ERROR') failing #{elseif}($testStatus == 'SKIPPED' || $testStatus == 'INCOMPLETE') skipped #{else}passing#end
     #end
     #macro( oddorevenrow $velocityCount)
       #if($velocityCount % 2 != 0)odd#{else} #end
