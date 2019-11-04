@@ -181,7 +181,7 @@ public class HtmlTestRunListener implements ITestRunListener {
         context.put("run_failure_message", mFailureMessage == null ? "" : mFailureMessage);
         context.put("test_count", Integer.toString(getTotalTests()));
         context.put("fail_count", getFailedTests());
-        context.put("skipped_count", getPassedTests());
+        context.put("skipped_count", getSkippedTests());
         context.put("test_suites", mResults);
     }
 
