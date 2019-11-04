@@ -24,14 +24,18 @@
       .test, .test-suite > .heading { height: 30px; overflow: hidden; margin: 0 30px;}
       .test, .test-suite > .heading { border-width: 1px; border-collapse: collapse; border-style: solid; }
       .test { margin-left: 30px; border-top:none;}
-      .test.failing { border-color: #C84F5E; background-color: #F4DDE0;}
+      .test.failing { border-color: #C84F5E;}
       .test.passing { border-color: #A1D761;}
+      .test.skipped { border-color: #969696;}
       .test.failing { background-color: #E7A1AA;}
       .test.passing { background-color: #CAF59F;}
+      .test.skipped { background-color: #C0C0C0;}
       .test.failing.odd { background-color: #EEC7CC;}
       .test.passing.odd { background-color: #E5FBCF;}
+      .test.skipped.odd { background-color: #D0D0D0;}
       .details.failing { background-color: #F4DDE0; border: 1px solid #C84F5E;}
       .details.passing { background-color: #E5F4DC; border: 1px solid #A1D761;}
+      .details.skipped { background-color: #D0D0D0; border: 1px solid #969696;}
       .test .test-detail:last-child { padding-bottom: 8px;}
       .test .title { float: left; font-size: 0.9em; margin-top: 8px; font-family: Menlo, Monaco, monospace;}
       .test .time { float: left;margin: 4px 10px 0 20px;}
@@ -88,11 +92,13 @@
         } else if (segment.id == "failing-segment") {
           hideAll(document.querySelectorAll('.test.passing'));
           showAll(document.querySelectorAll('.test.failing'));
+          hideAll(document.querySelectorAll('.test.skipped'));
           hideAll(document.querySelectorAll('.test-suite.passing'));
           showAll(document.querySelectorAll('.test-suite.failing'));
         } else if (segment.id == "passing-segment") {
           hideAll(document.querySelectorAll('.test.failing'));
           showAll(document.querySelectorAll('.test.passing'));
+          hideAll(document.querySelectorAll('.test.skipped'));
           hideAll(document.querySelectorAll('.test-suite.failing'));
           showAll(document.querySelectorAll('.test-suite.passing'));
         }
@@ -120,8 +126,8 @@
         </section>
       </section>
     </header>
-    #macro( failingorpassing $testStatus)
-      #if($testStatus == 'FAILURE')failing #{else}passing#end
+    #macro( map_status $testStatus)
+      #if($testStatus == 'FAILURE') failing #{elseif}($testStatus == 'SKIPPED') skipped #{else}passing#end
     #end
     #macro( oddorevenrow $velocityCount)
       #if($velocityCount % 2 != 0)odd#{else} #end
@@ -145,7 +151,7 @@
                 #set($metrics = $test_suites.get($suite).getMetrics())
                 #set($has_metrics = $metrics.size() > 0)
 
-                <tr class="test #failingorpassing($test_status) #oddorevenrow($velocityCount)" onclick="toggleDetails('$test_name');">
+                <tr class="test #map_status($test_status) #oddorevenrow($velocityCount)" onclick="toggleDetails('$test_name');">
                   <td>
                     #if($start_time && $end_time)
                       #set($total_time_in_seconds = $end_time - $start_time)
@@ -155,7 +161,7 @@
                   <td><h3 class="title">$test_name</h3></td>
                 </tr>
                 #if($has_stack_trace || $has_metrics)
-                  <tr class="details #failingorpassing($test_status) $test_name">
+                  <tr class="details #map_status($test_status) $test_name">
                     <td></td>
                     <td>
                       #if($has_stack_trace)
