@@ -270,8 +270,8 @@ public class XmlTestRunListener implements ITestRunListener {
 
         //add test results to velocity context 
         context.put("test_count", Integer.toString(mRunResult.getNumTests()));
-        context.put("fail_count", Integer.toString(mRunResult.getNumFailedTests()));
-        context.put("skipped_count", Integer.toString(mRunResult.getNumSkippedTests()));
+        context.put("fail_count", mRunResult.getNumFailedTests());
+        context.put("skipped_count", mRunResult.getNumSkippedTests());
         context.put("test_suites",mRunResult.getTestResults());
         context.put("suite_result",mRunResult.getSuiteResult());
 
