@@ -269,6 +269,7 @@ public class XmlTestRunListener implements ITestRunListener {
         serializer.attribute(ns, HOSTNAME, mHostName);
 
         //add test results to velocity context 
+        context.put("run_failure_message", mRunResult.isRunFailure() ? mRunResult.getRunFailureMessage() : "");
         context.put("test_count", Integer.toString(mRunResult.getNumTests()));
         context.put("fail_count", mRunResult.getNumFailedTests());
         context.put("skipped_count", mRunResult.getNumSkippedTests());
