@@ -25,8 +25,9 @@ public class InstrumentationPretty {
 
     public void processInsturmentationOutput() throws IOException{
         //create test listener and parser
-        XmlTestRunListener testListener = new XmlTestRunListener();
-        InstrumentationResultParser parser = new InstrumentationResultParser("Instrumentation results", testListener);
+        XmlTestRunListener xmlTestListener = new XmlTestRunListener();
+        HtmlTestRunListener htmlTestListener = new HtmlTestRunListener();
+        InstrumentationResultParser parser = new InstrumentationResultParser("Instrumentation results", Arrays.asList(xmlTestListener, htmlTestListener));
         File reportDir = null;
         if(!this.outputpath.isEmpty()){
             reportDir = new File(outputpath);
@@ -35,8 +36,9 @@ public class InstrumentationPretty {
             reportDir = new File(System.getProperty("user.dir") + "/reports");
         }
         reportDir.mkdir();
-        testListener.setReportDir(reportDir);
-        List<String> lines = new ArrayList<String>(); 
+        xmlTestListener.setReportDir(reportDir);
+        htmlTestListener.setReportDir(reportDir);
+        List<String> lines = new ArrayList<String>();
         
         //read lines from STDIN 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in)); 

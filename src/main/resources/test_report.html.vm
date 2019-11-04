@@ -147,22 +147,23 @@
       #if($velocityCount % 2 != 0)odd#{else} #end
     #end
     <section id="test-suites">
-         #set($detail_class = "Instrumentation_tests")
-          <section class="test-suite $suite_result " id="$detail_class">
+      #foreach($classname in $test_suites.keySet())
+          <section class="test-suite #map_status($test_suites.get($classname).getSuiteResult())" id="$classname">
             <section class="heading" onclick="toggleTests(this);">
-              <h3 class="title">$detail_class</h3>
+              <h3 class="title">$classname</h3>
             </section>
             <section class="tests">
             <table>
-              #foreach($suite in $test_suites.keySet())
-                #set($test_name = $suite.getTestName())
-                #set($test_status = $test_suites.get($suite).getStatus())
-                #set($start_time = $test_suites.get($suite).getStartTime())
-                #set($end_time = $test_suites.get($suite).getEndTime())
-                #set($has_stack_trace = $test_suites.get($suite).getStackTrace() || false)
+              #set($suite = $test_suites.get($classname).getTestResults())
+              #foreach($test in $suite.keySet())
+                #set($test_name = $test.getTestName())
+                #set($test_status = $suite.get($test).getStatus())
+                #set($start_time = $suite.get($test).getStartTime())
+                #set($end_time = $suite.get($test).getEndTime())
+                #set($has_stack_trace = $suite.get($test).getStackTrace() || false)
                 ## Only gets set if not null, check has_stack_trace first
-                #set($stack_trace = $test_suites.get($suite).getStackTrace())
-                #set($metrics = $test_suites.get($suite).getMetrics())
+                #set($stack_trace = $suite.get($test).getStackTrace())
+                #set($metrics = $suite.get($test).getMetrics())
                 #set($has_metrics = $metrics.size() > 0)
 
                 <tr class="test #map_status($test_status) #oddorevenrow($velocityCount)" onclick="toggleDetails('$test_name');">
@@ -192,7 +193,8 @@
               #end
             </table>
           </section>
-        </section> 
+        </section>
+      #end
     </section>
   <footer>Report generated with <a href="https://github.com/jamesknowsbest/Instrumentationpretty">InstrumentionPretty</a>, the <a href="https://github.com/supermarin/xcpretty/blob/master/assets/report.html.erb">XCPretty template</a>, and <a href="http://velocity.apache.org/">Apache Velocity</a></footer>
 </body>
