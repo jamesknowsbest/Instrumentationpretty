@@ -23,7 +23,10 @@ public class InstrumentationPretty {
         this.outputpath = outputpath;
     }
 
-    public void processInsturmentationOutput() throws IOException{
+    /**
+     * @return true if any tests failed
+     */
+    public boolean processInsturmentationOutput() throws IOException{
         //create test listener and parser
         XmlTestRunListener xmlTestListener = new XmlTestRunListener();
         HtmlTestRunListener htmlTestListener = new HtmlTestRunListener();
@@ -50,6 +53,8 @@ public class InstrumentationPretty {
 
         parser.processNewLines(lines.toArray(new String[0]));
         parser.done();
+
+        return xmlTestListener.getRunResult().hasFailedTests();
     }
 
     public static void main(String args[]){
@@ -74,13 +79,18 @@ public class InstrumentationPretty {
 
         String outputFilePath = cmd.getOptionValue("output");
         try {
+            final InstrumentationPretty resultParser;
             if(outputFilePath != null){
-                new InstrumentationPretty(outputFilePath).processInsturmentationOutput();
+                resultParser = new InstrumentationPretty(outputFilePath);
             }else{
-                new InstrumentationPretty("").processInsturmentationOutput();
-            }        
+                resultParser = new InstrumentationPretty("");
+            }
+
+            boolean failures = resultParser.processInsturmentationOutput();
+            System.exit(failures ? 2 : 0);
         } catch (IOException e) {
             e.printStackTrace();
-        }   
+            System.exit(1);
+        }
     }
 }
