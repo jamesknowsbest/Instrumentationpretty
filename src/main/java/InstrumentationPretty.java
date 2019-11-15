@@ -49,8 +49,15 @@ public class InstrumentationPretty {
         String input = null;
         while( (input = reader.readLine()) != null ){
             lines.add(input);
+
+            if (!reader.ready()) {
+                // Next read may block, flush the buffer
+                parser.processNewLines(lines.toArray(new String[0]));
+                lines.clear();
+            }
         }
 
+        // flush anything remaining in buffer
         parser.processNewLines(lines.toArray(new String[0]));
         parser.done();
 
