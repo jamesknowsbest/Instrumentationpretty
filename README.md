@@ -16,14 +16,16 @@
 
 ### Running
 
+Note: You must run am instrument in raw mode (`-r`) to get valid output to process
+
 #### Using with a ADB instrument command 
- `adb shell am instrument -w <test_package_name>/<runner_class> | java -classpath /path/to/Instrumentationpretty-all.jar InstrumentationPretty`
+ `adb shell am instrument -r -w <test_package_name>/<runner_class> | java -jar /path/to/Instrumentationpretty-all.jar`
 
 #### Using with an existing file
-`cat /path/to/instrument/log/file | java -classpath /path/to/Instrumentationpretty-all.jar InstrumentationPretty`
+`cat /path/to/instrument/log/file | java -jar /path/to/Instrumentationpretty-all.jar`
 
 #### Specify output directory 
-`cat /path/to/instrument/log/file | java -classpath /path/to/Instrumentationpretty-all.jar InstrumentationPretty -o <yourDirectoryHere>`
+`cat /path/to/instrument/log/file | java -jar /path/to/Instrumentationpretty-all.jar -o <yourDirectoryHere>`
 
 **Note**: if the directory doesn't exist it will be created. By default the output directory is the current working directory/reports as shown by this line in InstrumentationPretty.java
 

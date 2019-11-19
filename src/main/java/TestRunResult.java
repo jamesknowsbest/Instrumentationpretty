@@ -1,4 +1,8 @@
 /*
+ * Modified for https://github.com/jamesknowsbest/Instrumentationpretty
+ * Original license follows
+ */
+/*
  * Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -349,15 +353,8 @@ public class TestRunResult {
      * @return <code>passing</code> if suite had all successful passing tests, failing otherwise 
      *  
      */
-	public String getSuiteResult() {
-        //iterate through the test results to see if a test has a status other than passed
-        Map<TestIdentifier, TestResult> test_results = this.getTestResults();
-        for (Map.Entry<TestIdentifier,TestResult> entry : test_results.entrySet()) {
-            if(!entry.getValue().getStatus().equals(TestResult.TestStatus.PASSED)
-                    && !entry.getValue().getStatus().equals(TestResult.TestStatus.SKIPPED)){
-                return "failing";
-            }
-        }         
-        return "passing";
+	public TestResult.TestStatus getSuiteResult() {
+	    boolean failing = mNumFailedTests > 0 || mNumErrorTests > 0;
+	    return failing ? TestResult.TestStatus.FAILURE : TestResult.TestStatus.PASSED;
 	}
 }

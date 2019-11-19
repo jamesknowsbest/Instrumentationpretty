@@ -1,4 +1,8 @@
 /*
+ * Modified for https://github.com/jamesknowsbest/Instrumentationpretty
+ * Original license follows
+ */
+/*
  * Copyright (C) 2009 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,25 +23,16 @@ import org.kxml2.io.KXmlSerializer;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import org.apache.velocity.app.VelocityEngine;
-import org.apache.velocity.runtime.RuntimeConstants;
-import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
-import org.apache.velocity.Template;
-import org.apache.velocity.VelocityContext;
 
 /**
- * Writes JUnit results to an XML files in a format consistent with
- * Ant's XMLJUnitResultFormatter.
+ * Writes JUnit results to an XML files in a format consistent with Ant's XMLJUnitResultFormatter.
  * <p/>
  * Creates a separate XML file per test run.
  * <p/>
@@ -67,7 +62,9 @@ public class XmlTestRunListener implements ITestRunListener {
     private static final String TIMESTAMP = "timestamp";
     private static final String HOSTNAME = "hostname";
 
-    /** the XML namespace */
+    /**
+     * the XML namespace
+     */
     private static final String ns = null;
 
     private String mHostName = "localhost";
@@ -91,6 +88,7 @@ public class XmlTestRunListener implements ITestRunListener {
 
     /**
      * Returns the {@link TestRunResult}
+     *
      * @return the test run results.
      */
     public TestRunResult getRunResult() {
@@ -104,7 +102,7 @@ public class XmlTestRunListener implements ITestRunListener {
 
     @Override
     public void testStarted(TestIdentifier test) {
-       mRunResult.reportTestStarted(test);
+        mRunResult.reportTestStarted(test);
     }
 
     @Override
@@ -158,35 +156,12 @@ public class XmlTestRunListener implements ITestRunListener {
             serializer.setFeature(
                     "http://xmlpull.org/v1/doc/features.html#indent-output", true);
 
-            //create velocity object 
-            VelocityEngine ve = new VelocityEngine();
-            ve.setProperty(RuntimeConstants.RESOURCE_LOADER, "classpath");
-            ve.setProperty("classpath.resource.loader.class", ClasspathResourceLoader.class.getName());
-
-            ve.init();
-
-            //get template from jar and confirm it's there
-            InputStream input = this.getClass().getClassLoader().getResourceAsStream("test_report.html.vm");
-            if (input == null) {
-                throw new IOException("Template file doesn't exist");
-            }
-            //close the stream as the file's confirmed to be present and not needed now
-            input.close();
-            //create context object to hold test results and map to variables
-            VelocityContext context = new VelocityContext();
             // TODO: insert build info
-            printTestResults(serializer,context, timestamp, elapsedTime);
+            printTestResults(serializer, timestamp, elapsedTime);
             serializer.endDocument();
-            //get the velocity template
-            Template template = ve.getTemplate("test_report.html.vm", "UTF-8");
-            //merge the context object with the template and write to a string which can be written to a html file
-            FileWriter fw = new FileWriter(this.mReportDir + "/" + TEST_RESULT_FILE_PREFIX + ".html");
-            StringWriter writer = new StringWriter();
-            template.merge( context, writer );
-            fw.write(writer.toString());
-            fw.close();
+
             String msg = String.format("XML test result file generated at %s. Total tests %d, " +
-                    "Failed %d, Error %d, Skipped %d", getAbsoluteReportPath(), mRunResult.getNumTests(),
+                            "Failed %d, Error %d, Skipped %d", getAbsoluteReportPath(), mRunResult.getNumTests(),
                     mRunResult.getNumFailedTests(), mRunResult.getNumErrorTests(), mRunResult.getNumSkippedTests());
 
             Log.logAndDisplay(Log.LogLevel.INFO, LOG_TAG, msg);
@@ -205,7 +180,7 @@ public class XmlTestRunListener implements ITestRunListener {
     }
 
     private String getAbsoluteReportPath() {
-        return mReportPath ;
+        return mReportPath;
     }
 
     /**
@@ -223,9 +198,9 @@ public class XmlTestRunListener implements ITestRunListener {
 
     /**
      * Creates a {@link File} where the report will be created.
+     *
      * @param reportDir the root directory of the report.
      * @return a file
-     * @throws IOException
      */
     protected File getResultFile(File reportDir) throws IOException {
         File reportFile = File.createTempFile(TEST_RESULT_FILE_PREFIX, TEST_RESULT_FILE_SUFFIX,
@@ -249,7 +224,7 @@ public class XmlTestRunListener implements ITestRunListener {
         return mRunResult.getName();
     }
 
-    void printTestResults(KXmlSerializer serializer, VelocityContext context, String timestamp, long elapsedTime)
+    void printTestResults(KXmlSerializer serializer, String timestamp, long elapsedTime)
             throws IOException {
         serializer.startTag(ns, TESTSUITE);
         String name = getTestSuiteName();
@@ -263,13 +238,6 @@ public class XmlTestRunListener implements ITestRunListener {
         serializer.attribute(ns, ATTR_TIME, Double.toString((double) elapsedTime / 1000.f));
         serializer.attribute(ns, TIMESTAMP, timestamp);
         serializer.attribute(ns, HOSTNAME, mHostName);
-
-        //add test results to velocity context 
-        context.put("test_count", Integer.toString(mRunResult.getNumTests()));
-        context.put("fail_count", Integer.toString(mRunResult.getNumFailedTests()));
-        context.put("skipped_count", Integer.toString(mRunResult.getNumSkippedTests()));
-        context.put("test_suites",mRunResult.getTestResults());
-        context.put("suite_result",mRunResult.getSuiteResult());
 
         serializer.startTag(ns, PROPERTIES);
         setPropertiesAttributes(serializer, ns);
@@ -285,9 +253,9 @@ public class XmlTestRunListener implements ITestRunListener {
 
     /**
      * Sets the attributes on properties.
+     *
      * @param serializer the serializer
      * @param namespace the namespace
-     * @throws IOException
      */
     protected void setPropertiesAttributes(KXmlSerializer serializer, String namespace)
             throws IOException {
@@ -327,7 +295,7 @@ public class XmlTestRunListener implements ITestRunListener {
 //            if (msg != null && msg.length() > 0) {
 //                serializer.attribute(ns, ATTR_MESSAGE, msg);
 //            }
-           // TODO: get class name of stackTrace exception
+            // TODO: get class name of stackTrace exception
             //serializer.attribute(ns, ATTR_TYPE, testId.getClassName());
             String stackTrace = testResult.getStackTrace();
             String stackText = stackTrace == null ? "" : sanitize(stackTrace);
@@ -336,7 +304,7 @@ public class XmlTestRunListener implements ITestRunListener {
         }
 
         serializer.endTag(ns, TESTCASE);
-     }
+    }
 
     /**
      * Returns the text in a format that is safe for use in an XML document.
